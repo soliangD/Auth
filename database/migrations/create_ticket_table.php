@@ -18,13 +18,11 @@ class CreateTicketTable extends Migration
         Schema::create($tableNames['ticket'], function (Blueprint $table) {
             $table->increments('id');
             $table->string('uid');
-            $table->string('guard', '32');
-            $table->string('token', 128);
+            $table->string('token', 128)->unique()->index();
             $table->string('status');
             $table->string('ip');
             $table->string('expiration');
             $table->timestamps();
-            $table->unique(['token', 'guard']);
         });
     }
 

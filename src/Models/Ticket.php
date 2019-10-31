@@ -1,9 +1,9 @@
 <?php
 
-namespace Yunhan\JAuth\Models;
+namespace JMD\Auth\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Yunhan\JAuth\Util\AuthUtil;
+use JMD\Auth\Util\AuthUtil;
 
 /**
  * Class Ticket
@@ -31,35 +31,36 @@ class Ticket extends Model
         $this->setTable(AuthUtil::getTicketTableName());
     }
 
-    public function add($uid, $token, $guard, $exp)
+    public function login($uid)
     {
+        $token = AuthUtil::generateUUID($uid);
         $add = [
             'uid' => $uid,
             'token' => $token,
-            'guard' => $guard,
             'status' => 0,
             'ip' => AuthUtil::request()->ip() ?: '',
-            'expiration' => AuthUtil::currentTime() + $exp,
+            'expiration' => AuthUtil::currentTime() + (int)AuthUtil::getTokenExpiration(),
         ];
         $res = $this->create($add)->id;
         return $res ? $token : false;
     }
 
-    public function del($token, $guard)
+    public function logout($token)
     {
-        return static::where([
-                'token' => $token,
-                'guard' => $guard
-            ])
-            ->update(['status' => $this->status_del]) > 0;
+        return static::where(['token' => $token])->update(['status' => $this->status_del]);
     }
 
-    public function get($token, $guard)
+    /**
+     * 根据 token 查找
+     * @param $token
+     * @param array $columns
+     * @return mixed
+     */
+    public function findOneByToken($token, $columns = ['*'])
     {
         return static::where([
             'token' => $token,
             'status' => $this->status_normal,
-            'guard' => $guard
-        ])->first();
+        ])->first($columns);
     }
 }

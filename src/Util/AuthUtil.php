@@ -1,10 +1,9 @@
 <?php
 
-namespace Yunhan\JAuth\Util;
+namespace JMD\Auth\Util;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\Types\Self_;
 
 class AuthUtil
 {
@@ -52,7 +51,7 @@ class AuthUtil
      */
     public static function getTokenName()
     {
-        return self::config('token_name');
+        return self::config()['token_name'];
     }
 
     /**
@@ -60,9 +59,9 @@ class AuthUtil
      * @param string $name
      * @return array
      */
-    public static function config($name, $default = null, $baseName = 'JAuth')
+    public static function config($name = 'JAuth')
     {
-        return config("{$baseName}.{$name}", $default);
+        return config($name);
     }
 
     public static function currentTime()
@@ -83,9 +82,9 @@ class AuthUtil
      * 获取当前 Guard 对应 driver
      * @return string
      */
-    public static function getDriverByGuard($guard = null)
+    public static function getCurrentDriver()
     {
-        $currentGuard = empty($guard) ? self::getCurrentGuard() : $guard;
+        $currentGuard = self::getCurrentGuard();
         return config("auth.guards.{$currentGuard}.driver");
     }
 
@@ -109,22 +108,9 @@ class AuthUtil
         return config("auth.providers.{$providers}.model");
     }
 
-    /**
-     * 获取 auth.php config 配置的 guards 配置
-     * @return mixed
-     */
     public static function getGuardConfig()
     {
         return config('auth.guards');
-    }
-
-    /**
-     * 获取 JAuth.php config 配置的 driver_config 配置
-     * @return array
-     */
-    public static function getStorageConfig()
-    {
-        return self::config('driver.token.storage_config');
     }
 
     /**
@@ -133,7 +119,7 @@ class AuthUtil
      */
     public static function getTicketTableName()
     {
-        return self::config('driver.token.storage_config.database.ticket_table_name');
+        return self::config()['table_names']['ticket'];
     }
 
     /**
@@ -142,26 +128,6 @@ class AuthUtil
      */
     public static function getTokenExpiration()
     {
-        return self::config('expiration');
-    }
-
-    /**
-     * 获取 storage_driver 配置(默认存储)
-     * @return array
-     */
-    public static function storageName()
-    {
-        return self::config('driver.token.storage_default', 'database');
-    }
-
-    /**
-     * 验证 guard 是否为配置中的有效项
-     * @param $guard
-     * @return bool
-     */
-    public static function guardNameIsValid($guard)
-    {
-        $arr = self::getGuardConfig();
-        return array_key_exists($guard, $arr);
+        return self::config()['expiration'];
     }
 }

@@ -1,14 +1,11 @@
 <?php
 
-namespace Yunhan\JAuth;
+namespace JMD\Auth;
 
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\ServiceProvider;
-use Yunhan\JAuth\Driver\SsoDriver;
-use Yunhan\JAuth\Driver\TokenDriver;
-use Yunhan\JAuth\Exceptions\ExpiredException;
-use Yunhan\JAuth\Exceptions\SignatureTokenException;
-use Yunhan\JAuth\Exceptions\UnauthorizedException;
+use JMD\Auth\Exceptions\ExpiredException;
+use JMD\Auth\Exceptions\SignatureTokenException;
+use JMD\Auth\Exceptions\UnauthorizedException;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -18,10 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->configure('JAuth');
-
-        $jauthPath = realpath(__DIR__.'/../config/JAuth.php');
-        $this->mergeConfigFrom($jauthPath, 'JAuth');
+        //
     }
 
     /**
@@ -35,25 +29,13 @@ class AuthServiceProvider extends ServiceProvider
         $this->app['auth']->viaRequest('default', function ($request) {
             throw new UnauthorizedException('未进行身份认证');
         });
-        // driver:token
-        $this->app['auth']->viaRequest('token', function ($request) {
+        // 获取用户
+        $this->app['auth']->viaRequest('JAuth', function ($request) {
             try {
-                return TokenDriver::getUser();
+                return AuthBase::getUser();
             } catch (SignatureTokenException $e) {
                 return null;
             } catch (ExpiredException $e) {
-                return null;
-            }
-        });
-        // driver:session
-        $this->app['auth']->viaRequest('session', function ($request) {
-            // ..
-        });
-        // driver:sso
-        $this->app['auth']->viaRequest('sso', function ($request) {
-            try {
-                return SsoDriver::getUser();
-            } catch (AuthorizationException $e) {
                 return null;
             }
         });

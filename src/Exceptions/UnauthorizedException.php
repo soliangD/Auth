@@ -1,6 +1,6 @@
 <?php
 
-namespace Yunhan\JAuth\Exceptions;
+namespace JMD\Auth\Exceptions;
 
 class UnauthorizedException extends \Illuminate\Validation\UnauthorizedException
 {

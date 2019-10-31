@@ -1,6 +1,6 @@
 <?php
 
-namespace Yunhan\JAuth\Exceptions;
+namespace JMD\Auth\Exceptions;
 
 class SystemException extends \UnexpectedValueException
 {

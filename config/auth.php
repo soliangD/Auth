@@ -48,11 +48,11 @@ return [
             'provider' => ''
         ],
         'admin' => [
-            'driver' => 'token',
+            'driver' => 'JAuth',
             'provider' => 'admin'
         ],
         'user' => [
-            'driver' => 'token',
+            'driver' => 'JAuth',
             'provider' => 'users'
         ],
     ],

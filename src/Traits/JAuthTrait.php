@@ -7,7 +7,7 @@
  * author: soliang
  */
 
-namespace Yunhan\JAuth\Traits;
+namespace JMD\Auth\Traits;
 
 trait JAuthTrait
 {

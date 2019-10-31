@@ -1,14 +1,14 @@
 <?php
 
-namespace Yunhan\JAuth\Middleware;
+namespace JMD\Auth\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Yunhan\JAuth\AuthBase;
-use Yunhan\JAuth\Exceptions\SystemException;
-use Yunhan\JAuth\Exceptions\UnauthorizedException;
-use Yunhan\JAuth\Util\AuthUtil;
+use JMD\Auth\AuthBase;
+use JMD\Auth\Exceptions\SystemException;
+use JMD\Auth\Exceptions\UnauthorizedException;
+use JMD\Auth\Util\AuthUtil;
 
 class JAuthMiddleware
 {
@@ -18,7 +18,7 @@ class JAuthMiddleware
 
     public function handle(Request $request, Closure $next, $guard = null, $needLogin = null)
     {
-        if (!AuthUtil::guardNameIsValid($guard)) {
+        if (!AuthBase::guardNameIsValid($guard)) {
             throw new SystemException('Middleware 无效 Auth Guard 传参');
         }
 
